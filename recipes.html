@@ -231,6 +231,23 @@
                             <p class="text-blue-700"><span class="font-bold">💡 Chef's Tip:</span> ${recipe.tips}</p>
                         </div>
                     ` : ''}
+                    
+                    <!-- Rating Section -->
+                    <div class="mt-6 p-4 bg-amber-50 rounded-xl border-2 border-amber-200">
+                        <h4 class="font-bold text-amber-800 mb-3">⭐ Rate this Recipe</h4>
+                        <div class="flex items-center gap-2 mb-3">
+                            ${[1,2,3,4,5].map(star => `
+                                <button 
+                                    onclick="rateRecipe('${recipe.id}', ${star})"
+                                    class="text-3xl hover:scale-125 transition-transform cursor-pointer opacity-50 hover:opacity-100 rate-star"
+                                    data-star="${star}"
+                                >
+                                    ⭐
+                                </button>
+                            `).join('')}
+                        </div>
+                        <p class="text-sm text-amber-600" id="ratingStatus">Tap a star to rate</p>
+                    </div>
                 </div>
             `;
             
@@ -242,6 +259,75 @@
         function closeModal() {
             document.getElementById('recipeModal').classList.add('hidden');
             document.body.style.overflow = '';
+        }
+
+        // Rate a recipe
+        async function rateRecipe(recipeId, rating) {
+            const statusEl = document.getElementById('ratingStatus');
+            statusEl.textContent = 'Submitting rating...';
+            
+            try {
+                // Generate anonymous user ID (stored in localStorage)
+                let odingId = localStorage.getItem('smartkitchen_user_id');
+                if (!odingId) {
+                    odingId = 'anon_' + Math.random().toString(36).substring(2, 15);
+                    localStorage.setItem('smartkitchen_user_id', odingId);
+                }
+                
+                const db = firebase.firestore();
+                const docRef = db.collection('community_recipes').doc(recipeId);
+                const doc = await docRef.get();
+                
+                if (!doc.exists) {
+                    statusEl.textContent = 'Recipe not found';
+                    return;
+                }
+                
+                const data = doc.data();
+                const ratings = data.ratings || {};
+                
+                // Add this user's rating
+                ratings[odingId] = {
+                    odingId: odingId,
+                    rating: rating,
+                    timestamp: Date.now()
+                };
+                
+                // Calculate new average
+                const allRatings = Object.values(ratings);
+                const totalRating = allRatings.reduce((sum, r) => sum + r.rating, 0);
+                const averageRating = allRatings.length > 0 ? totalRating / allRatings.length : 0;
+                
+                await docRef.update({
+                    ratings: ratings,
+                    averageRating: Math.round(averageRating * 10) / 10,
+                    ratingCount: allRatings.length
+                });
+                
+                // Update UI
+                statusEl.innerHTML = `<span class="text-green-600 font-bold">✓ You rated ${rating} star${rating > 1 ? 's' : ''}! (Avg: ${averageRating.toFixed(1)})</span>`;
+                
+                // Highlight selected stars
+                document.querySelectorAll('.rate-star').forEach((star, idx) => {
+                    if (idx < rating) {
+                        star.classList.remove('opacity-50');
+                        star.classList.add('opacity-100');
+                    }
+                });
+                
+                // Update the recipe in our local array
+                const recipeIndex = allRecipes.findIndex(r => r.id === recipeId);
+                if (recipeIndex !== -1) {
+                    allRecipes[recipeIndex].averageRating = averageRating;
+                    allRecipes[recipeIndex].ratingCount = allRatings.length;
+                }
+                
+                console.log('[Rating] Submitted:', rating, 'stars for recipe:', recipeId);
+                
+            } catch (e) {
+                console.error('[Rating] Error:', e);
+                statusEl.innerHTML = `<span class="text-red-600">Error: ${e.message}</span>`;
+            }
         }
 
         // Filter recipes
