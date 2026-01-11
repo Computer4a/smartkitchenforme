@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Share Recipe - Smart Kitchen For Me</title>
+  <meta name="description" content="Share your AI-generated recipes with the community">
+  
+  <!-- Open Graph for social sharing -->
+  <meta property="og:title" content="Recipe Shared on Smart Kitchen For Me">
+  <meta property="og:description" content="Check out this delicious recipe!">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://smartkitchenforme.com/share">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 20px 0 30px;
+      color: white;
+    }
+    
+    .logo {
+      font-size: 2rem;
+      margin-bottom: 5px;
+    }
+    
+    .site-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
+    .tagline {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
+    /* Recipe Card */
+    .recipe-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .recipe-header {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      padding: 25px;
+      color: white;
+    }
+    
+    .recipe-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .recipe-meta {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .meta-badge {
+      background: rgba(255,255,255,0.2);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .meal-type-badge {
+      background: rgba(255,255,255,0.3);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    .recipe-body {
+      padding: 25px;
+    }
+    
+    .section {
+      margin-bottom: 25px;
+    }
+    
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .ingredients-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 8px;
+    }
+    
+    .ingredients-list li {
+      background: #f3f4f6;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+    
+    .instructions-list {
+      list-style: none;
+      counter-reset: step;
+    }
+    
+    .instructions-list li {
+      counter-increment: step;
+      padding: 15px;
+      padding-left: 50px;
+      position: relative;
+      background: #fefce8;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+    
+    .instructions-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 25px;
+      height: 25px;
+      background: #f97316;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    /* Rating Section */
+    .rating-section {
+      background: #f0fdf4;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+    }
+    
+    .rating-title {
+      font-weight: 600;
+      color: #166534;
+      margin-bottom: 15px;
+    }
+    
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .star {
+      font-size: 2rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+      filter: grayscale(100%);
+    }
+    
+    .star:hover {
+      transform: scale(1.2);
+    }
+    
+    .star.active {
+      filter: grayscale(0%);
+    }
+    
+    .comment-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #d1d5db;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      resize: vertical;
+      min-height: 80px;
+      margin-bottom: 15px;
+    }
+    
+    .comment-input:focus {
+      outline: none;
+      border-color: #22c55e;
+    }
+    
+    .submit-btn {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(34, 197, 94, 0.4);
+    }
+    
+    /* Share Buttons */
+    .share-section {
+      padding: 20px 25px;
+      background: #f9fafb;
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    .share-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #6b7280;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    
+    .share-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .share-btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s;
+    }
+    
+    .share-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .share-btn.facebook {
+      background: #1877f2;
+      color: white;
+    }
+    
+    .share-btn.whatsapp {
+      background: #25d366;
+      color: white;
+    }
+    
+    .share-btn.copy {
+      background: #6b7280;
+      color: white;
+    }
+    
+    .share-btn.twitter {
+      background: #1da1f2;
+      color: white;
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+    
+    .empty-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+    
+    .empty-desc {
+      color: #6b7280;
+      margin-bottom: 25px;
+    }
+    
+    .cta-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.85rem;
+    }
+    
+    .footer a {
+      color: white;
+      text-decoration: none;
+    }
+    
+    /* Success Message */
+    .success-message {
+      display: none;
+      background: #dcfce7;
+      border: 2px solid #22c55e;
+      color: #166534;
+      padding: 15px 20px;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 15px;
+      font-weight: 500;
+    }
+    
+    .success-message.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Copy Toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1f2937;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    
+    /* Responsive */
+    @media (max-width: 480px) {
+      .recipe-title {
+        font-size: 1.3rem;
+      }
+      
+      .ingredients-list {
+        grid-template-columns: 1fr;
+      }
+      
+      .share-buttons {
+        flex-direction: column;
+      }
+      
+      .share-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">🍳</div>
+      <div class="site-name">Smart Kitchen For Me</div>
+      <div class="tagline">Share & Discover Family Recipes</div>
+    </div>
+    
+    <!-- Recipe Card -->
+    <div class="recipe-card">
+      <!-- Recipe content will be populated by JavaScript -->
+      <div id="recipe-content">
+        <!-- Loading state -->
+        <div class="empty-state" id="loading-state">
+          <div class="empty-icon">⏳</div>
+          <div class="empty-title">Loading Recipe...</div>
+        </div>
+        
+        <!-- Empty state (no recipe in URL) -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+          <div class="empty-icon">👨‍🍳</div>
+          <div class="empty-title">No Recipe Found</div>
+          <div class="empty-desc">Share recipes from the Smart Kitchen app to see them here!</div>
+          <a href="/" class="cta-btn">Browse Community Recipes</a>
+        </div>
+        
+        <!-- Recipe display (populated by JS) -->
+        <div id="recipe-display" style="display: none;">
+          <div class="recipe-header">
+            <div class="recipe-title">
+              <span>👨‍🍳</span>
+              <span id="recipe-title-text"></span>
+            </div>
+            <div class="recipe-meta">
+              <span class="meta-badge" id="recipe-time">
+                <span>⏱️</span>
+                <span id="recipe-time-text"></span>
+              </span>
+              <span class="meta-badge" id="recipe-difficulty">
+                <span>📊</span>
+                <span id="recipe-difficulty-text"></span>
+              </span>
+              <span class="meal-type-badge" id="recipe-meal-type" style="display: none;">
+                <span id="recipe-meal-icon"></span>
+                <span id="recipe-meal-text"></span>
+              </span>
+            </div>
+          </div>
+          
+          <div class="recipe-body">
+            <!-- Ingredients -->
+            <div class="section">
+              <div class="section-title">
+                <span>🥗</span> Ingredients
+              </div>
+              <ul class="ingredients-list" id="ingredients-list">
+                <!-- Populated by JS -->
+              </ul>
+            </div>
+            
+            <!-- Instructions -->
+            <div class="section">
+              <div class="section-title">
+                <span>📝</span> Instructions
+              </div>
+              <ol class="instructions-list" id="instructions-list">
+                <!-- Populated by JS -->
+              </ol>
+            </div>
+            
+            <!-- Rating Section -->
+            <div class="section">
+              <div class="rating-section">
+                <div class="rating-title">⭐ Rate this recipe!</div>
+                <div class="stars" id="stars">
+                  <span class="star" data-rating="1">⭐</span>
+                  <span class="star" data-rating="2">⭐</span>
+                  <span class="star" data-rating="3">⭐</span>
+                  <span class="star" data-rating="4">⭐</span>
+                  <span class="star" data-rating="5">⭐</span>
+                </div>
+                <textarea class="comment-input" id="comment-input" placeholder="Share your thoughts about this recipe... (optional)"></textarea>
+                <button class="submit-btn" id="submit-rating">Submit Rating</button>
+                <div class="success-message" id="success-message">
+                  ✅ Thank you for your rating!
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Share Buttons -->
+          <div class="share-section">
+            <div class="share-title">Share this recipe</div>
+            <div class="share-buttons">
+              <button class="share-btn facebook" onclick="shareToFacebook()">
+                <span>📘</span> Facebook
+              </button>
+              <button class="share-btn whatsapp" onclick="shareToWhatsApp()">
+                <span>💬</span> WhatsApp
+              </button>
+              <button class="share-btn twitter" onclick="shareToTwitter()">
+                <span>🐦</span> Twitter
+              </button>
+              <button class="share-btn copy" onclick="copyRecipeLink()">
+                <span>📋</span> Copy Link
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <p>Shared from <strong>Smart Kitchen For Me</strong> App</p>
+      <p style="margin-top: 5px;">
+        <a href="/">Home</a> • 
+        <a href="/recipes">Browse Recipes</a> • 
+        <a href="/about">About</a>
+      </p>
+    </div>
+  </div>
+  
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+  
+  <script>
+    // Global recipe data
+    let currentRecipe = null;
+    let selectedRating = 0;
+    
+    // Parse recipe from URL on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      parseRecipeFromURL();
+      setupStarRating();
+      setupSubmitButton();
+    });
+    
+    function parseRecipeFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const recipeData = urlParams.get('recipe');
+      
+      const loadingState = document.getElementById('loading-state');
+      const emptyState = document.getElementById('empty-state');
+      const recipeDisplay = document.getElementById('recipe-display');
+      
+      if (!recipeData) {
+        // No recipe in URL
+        loadingState.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+      }
+      
+      try {
+        currentRecipe = JSON.parse(decodeURIComponent(recipeData));
+        displayRecipe(currentRecipe);
+        
+        loadingState.style.display = 'none';
+        recipeDisplay.style.display = 'block';
+        
+        // Update page title
+        document.title = `${currentRecipe.title} - Smart Kitchen For Me`;
+        
+      } catch (e) {
+        console.error('Failed to parse recipe data:', e);
+        loadingState.style.display = 'none';
+        emptyState.style.display = 'block';
+      }
+    }
+    
+    function displayRecipe(recipe) {
+      // Title
+      document.getElementById('recipe-title-text').textContent = recipe.title || 'Untitled Recipe';
+      
+      // Time
+      document.getElementById('recipe-time-text').textContent = recipe.time || 'N/A';
+      
+      // Difficulty
+      document.getElementById('recipe-difficulty-text').textContent = recipe.difficulty || 'Easy';
+      
+      // Meal Type
+      if (recipe.mealType && recipe.mealType !== 'any') {
+        const mealTypeEl = document.getElementById('recipe-meal-type');
+        const mealIconEl = document.getElementById('recipe-meal-icon');
+        const mealTextEl = document.getElementById('recipe-meal-text');
+        
+        const mealIcons = {
+          'breakfast': '🌅',
+          'lunch': '☀️',
+          'dinner': '🌙'
+        };
+        
+        const mealLabels = {
+          'breakfast': 'Breakfast',
+          'lunch': 'Lunch',
+          'dinner': 'Dinner'
+        };
+        
+        mealIconEl.textContent = mealIcons[recipe.mealType] || '🍽️';
+        mealTextEl.textContent = mealLabels[recipe.mealType] || recipe.mealType;
+        mealTypeEl.style.display = 'inline-flex';
+      }
+      
+      // Ingredients
+      const ingredientsList = document.getElementById('ingredients-list');
+      ingredientsList.innerHTML = '';
+      if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
+        recipe.ingredients.forEach(ingredient => {
+          const li = document.createElement('li');
+          li.textContent = ingredient;
+          ingredientsList.appendChild(li);
+        });
+      }
+      
+      // Instructions
+      const instructionsList = document.getElementById('instructions-list');
+      instructionsList.innerHTML = '';
+      if (recipe.instructions && Array.isArray(recipe.instructions)) {
+        recipe.instructions.forEach(instruction => {
+          const li = document.createElement('li');
+          li.textContent = instruction;
+          instructionsList.appendChild(li);
+        });
+      }
+    }
+    
+    function setupStarRating() {
+      const stars = document.querySelectorAll('.star');
+      
+      stars.forEach(star => {
+        star.addEventListener('click', function() {
+          selectedRating = parseInt(this.dataset.rating);
+          updateStarDisplay(selectedRating);
+        });
+        
+        star.addEventListener('mouseenter', function() {
+          updateStarDisplay(parseInt(this.dataset.rating));
+        });
+      });
+      
+      document.getElementById('stars').addEventListener('mouseleave', function() {
+        updateStarDisplay(selectedRating);
+      });
+    }
+    
+    function updateStarDisplay(rating) {
+      const stars = document.querySelectorAll('.star');
+      stars.forEach((star, index) => {
+        if (index < rating) {
+          star.classList.add('active');
+        } else {
+          star.classList.remove('active');
+        }
+      });
+    }
+    
+    function setupSubmitButton() {
+      document.getElementById('submit-rating').addEventListener('click', function() {
+        if (selectedRating === 0) {
+          showToast('Please select a rating first!');
+          return;
+        }
+        
+        const comment = document.getElementById('comment-input').value;
+        
+        // Here you would normally send to a backend
+        // For GoDaddy, you could use a Google Form or similar
+        const ratingData = {
+          recipe: currentRecipe?.title,
+          rating: selectedRating,
+          comment: comment,
+          timestamp: new Date().toISOString()
+        };
+        
+        console.log('Rating submitted:', ratingData);
+        
+        // For now, just show success message
+        // In production, you'd send this to your backend/Google Form
+        
+        // Option 1: Send to Google Form (uncomment and add your form URL)
+        // submitToGoogleForm(ratingData);
+        
+        // Option 2: Store in localStorage for demo
+        saveRatingLocally(ratingData);
+        
+        // Show success
+        document.getElementById('success-message').classList.add('show');
+        document.getElementById('submit-rating').disabled = true;
+        document.getElementById('submit-rating').textContent = 'Submitted!';
+      });
+    }
+    
+    function saveRatingLocally(data) {
+      // Save to localStorage (demo purposes)
+      const ratings = JSON.parse(localStorage.getItem('recipe_ratings') || '[]');
+      ratings.push(data);
+      localStorage.setItem('recipe_ratings', JSON.stringify(ratings));
+    }
+    
+    // Uncomment and customize this function to use Google Forms
+    /*
+    function submitToGoogleForm(data) {
+      const formUrl = 'YOUR_GOOGLE_FORM_URL';
+      const formData = new FormData();
+      formData.append('entry.XXXXXX', data.recipe); // Recipe name field
+      formData.append('entry.XXXXXX', data.rating); // Rating field
+      formData.append('entry.XXXXXX', data.comment); // Comment field
+      
+      fetch(formUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
+      });
+    }
+    */
+    
+    // Share functions
+    function shareToFacebook() {
+      const url = encodeURIComponent(window.location.href);
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+    }
+    
+    function shareToWhatsApp() {
+      const text = encodeURIComponent(`Check out this recipe: ${currentRecipe?.title}\n${window.location.href}`);
+      window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+    
+    function shareToTwitter() {
+      const text = encodeURIComponent(`I found this amazing recipe: ${currentRecipe?.title} 🍳`);
+      const url = encodeURIComponent(window.location.href);
+      window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    }
+    
+    function copyRecipeLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        showToast('Link copied to clipboard!');
+      }).catch(() => {
+        showToast('Failed to copy link');
+      });
+    }
+    
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

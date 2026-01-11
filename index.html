@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Kitchen For Me - Share & Discover Family Recipes</title>
+  <meta name="description" content="Share AI-generated recipes with family and community. Rate, comment, and discover new dishes!">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Smart Kitchen For Me">
+  <meta property="og:description" content="Share & Discover Family Recipes">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://smartkitchenforme.com">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f8fafc;
+      color: #1f2937;
+    }
+    
+    /* Navigation */
+    .nav {
+      background: white;
+      padding: 15px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .nav-logo-icon {
+      font-size: 1.8rem;
+    }
+    
+    .nav-logo-text {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #7c3aed;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: #6b7280;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    
+    .nav-links a:hover {
+      color: #7c3aed;
+    }
+    
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 80px 20px;
+      text-align: center;
+      color: white;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+    
+    .hero-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 15px 30px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .btn-primary {
+      background: white;
+      color: #7c3aed;
+      border: none;
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+    
+    /* Features Section */
+    .features {
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 50px;
+      color: #1f2937;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+    
+    .feature-card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+    
+    .feature-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    
+    .feature-desc {
+      color: #6b7280;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    /* Recent Recipes Section */
+    .recipes-section {
+      padding: 80px 20px;
+      background: white;
+    }
+    
+    .recipes-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .recipes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+    }
+    
+    .recipe-card {
+      background: #f9fafb;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    
+    .recipe-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .recipe-image {
+      height: 180px;
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+    
+    .recipe-content {
+      padding: 20px;
+    }
+    
+    .recipe-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .recipe-meta {
+      display: flex;
+      gap: 15px;
+      color: #6b7280;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+    
+    .recipe-rating {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .recipe-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .tag {
+      background: #e0e7ff;
+      color: #4338ca;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    /* How It Works Section */
+    .how-it-works {
+      padding: 80px 20px;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    }
+    
+    .how-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+    
+    .step {
+      text-align: center;
+    }
+    
+    .step-number {
+      width: 50px;
+      height: 50px;
+      background: #f97316;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0 auto 15px;
+    }
+    
+    .step-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .step-desc {
+      color: #78350f;
+      font-size: 0.9rem;
+    }
+    
+    /* CTA Section */
+    .cta {
+      padding: 80px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .cta h2 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+    
+    .cta p {
+      opacity: 0.9;
+      margin-bottom: 30px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    /* Footer */
+    .footer {
+      background: #1f2937;
+      color: white;
+      padding: 50px 20px;
+    }
+    
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+    }
+    
+    .footer-section h3 {
+      font-size: 1rem;
+      margin-bottom: 15px;
+      color: #f3f4f6;
+    }
+    
+    .footer-section a {
+      display: block;
+      color: #9ca3af;
+      text-decoration: none;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+    
+    .footer-section a:hover {
+      color: white;
+    }
+    
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0;
+      padding-top: 20px;
+      border-top: 1px solid #374151;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 0.85rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .section-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <span class="nav-logo-icon">🍳</span>
+        <span class="nav-logo-text">Smart Kitchen For Me</span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/recipes">Recipes</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>🍳 Share & Discover<br>Family Recipes</h1>
+    <p>Create AI-powered recipes from your ingredients, share with family & friends, and explore dishes from our community!</p>
+    <div class="hero-buttons">
+      <a href="/recipes" class="btn btn-primary">
+        <span>📖</span> Browse Recipes
+      </a>
+      <a href="#how-it-works" class="btn btn-secondary">
+        <span>💡</span> How It Works
+      </a>
+    </div>
+  </section>
+  
+  <!-- Features Section -->
+  <section class="features">
+    <h2 class="section-title">Why Smart Kitchen For Me?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3 class="feature-title">AI-Powered Recipes</h3>
+        <p class="feature-desc">Generate personalized recipes based on ingredients you have at home. No more food waste!</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👨‍👩‍👧‍👦</div>
+        <h3 class="feature-title">Share with Family</h3>
+        <p class="feature-desc">Instantly share recipes with family members. Everyone stays in sync on meal plans!</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⭐</div>
+        <h3 class="feature-title">Community Ratings</h3>
+        <p class="feature-desc">Rate and review recipes. Help others discover the best dishes!</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏥</div>
+        <h3 class="feature-title">Health-Aware</h3>
+        <p class="feature-desc">Recipes adapted for dietary restrictions, allergies, and health conditions.</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Recent Recipes Section -->
+  <section class="recipes-section">
+    <div class="recipes-container">
+      <h2 class="section-title">🔥 Popular Community Recipes</h2>
+      <div class="recipes-grid" id="recipes-grid">
+        <!-- Sample recipe cards (would be dynamically loaded) -->
+        <div class="recipe-card">
+          <div class="recipe-image">🍗</div>
+          <div class="recipe-content">
+            <h3 class="recipe-title">Honey Garlic Chicken</h3>
+            <div class="recipe-meta">
+              <span>⏱️ 25 min</span>
+              <span class="recipe-rating">⭐ 4.8 (24)</span>
+            </div>
+            <div class="recipe-tags">
+              <span class="tag">🌙 Dinner</span>
+              <span class="tag">Easy</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="recipe-card">
+          <div class="recipe-image">🥗</div>
+          <div class="recipe-content">
+            <h3 class="recipe-title">Mediterranean Quinoa Bowl</h3>
+            <div class="recipe-meta">
+              <span>⏱️ 15 min</span>
+              <span class="recipe-rating">⭐ 4.6 (18)</span>
+            </div>
+            <div class="recipe-tags">
+              <span class="tag">☀️ Lunch</span>
+              <span class="tag">Healthy</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="recipe-card">
+          <div class="recipe-image">🥞</div>
+          <div class="recipe-content">
+            <h3 class="recipe-title">Fluffy Banana Pancakes</h3>
+            <div class="recipe-meta">
+              <span>⏱️ 20 min</span>
+              <span class="recipe-rating">⭐ 4.9 (32)</span>
+            </div>
+            <div class="recipe-tags">
+              <span class="tag">🌅 Breakfast</span>
+              <span class="tag">Kid-Friendly</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="recipe-card">
+          <div class="recipe-image">🍝</div>
+          <div class="recipe-content">
+            <h3 class="recipe-title">Creamy Garlic Pasta</h3>
+            <div class="recipe-meta">
+              <span>⏱️ 30 min</span>
+              <span class="recipe-rating">⭐ 4.7 (21)</span>
+            </div>
+            <div class="recipe-tags">
+              <span class="tag">🌙 Dinner</span>
+              <span class="tag">Vegetarian</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- How It Works Section -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="how-container">
+      <h2 class="section-title">How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3 class="step-title">Scan Your Ingredients</h3>
+          <p class="step-desc">Use the Smart Kitchen app to scan your fridge and pantry items</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3 class="step-title">Generate Recipe</h3>
+          <p class="step-desc">AI creates personalized recipes based on what you have</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3 class="step-title">Share & Rate</h3>
+          <p class="step-desc">Share with family or community and get feedback</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3 class="step-title">Cook & Enjoy!</h3>
+          <p class="step-desc">Follow step-by-step instructions and enjoy your meal</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="cta">
+    <h2>Ready to Start Cooking Smarter?</h2>
+    <p>Download the Smart Kitchen app and join thousands of home cooks sharing delicious recipes!</p>
+    <a href="#" class="btn btn-primary">
+      <span>📱</span> Get the App
+    </a>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3>🍳 Smart Kitchen For Me</h3>
+        <p style="color: #9ca3af; font-size: 0.9rem;">AI-powered recipe sharing for families and food lovers.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <a href="/">Home</a>
+        <a href="/recipes">Browse Recipes</a>
+        <a href="/share">Share a Recipe</a>
+        <a href="/about">About Us</a>
+      </div>
+      <div class="footer-section">
+        <h3>Support</h3>
+        <a href="/help">Help Center</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+      </div>
+      <div class="footer-section">
+        <h3>Connect</h3>
+        <a href="#">📘 Facebook</a>
+        <a href="#">📸 Instagram</a>
+        <a href="#">🐦 Twitter</a>
+        <a href="#">📧 Newsletter</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Smart Kitchen For Me. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
