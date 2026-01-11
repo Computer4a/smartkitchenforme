@@ -320,14 +320,15 @@
             }
         }
 
-        // Firebase configuration (same as app)
+        // Firebase configuration (MUST match app's firebaseConfig.ts)
+        // Project: visionTestAI (ID: gen-lang-client-0066699990)
         const firebaseConfig = {
-            apiKey: "AIzaSyA9KeqSiGZ_oF-G9Cyqo_EW1lBaJe9xPdw",
-            authDomain: "smartkitchen-b2c48.firebaseapp.com",
-            projectId: "smartkitchen-b2c48",
-            storageBucket: "smartkitchen-b2c48.appspot.com",
-            messagingSenderId: "1025313238750",
-            appId: "1:1025313238750:web:5fa8c24bd5ab5f68e5f8c7"
+            apiKey: "AIzaSyAqXhjFiA8NKXxlfdHjnqTClk31f9k_Nv0",
+            authDomain: "gen-lang-client-0066699990.firebaseapp.com",
+            projectId: "gen-lang-client-0066699990",
+            storageBucket: "gen-lang-client-0066699990.appspot.com",
+            messagingSenderId: "327963514636",
+            appId: "1:327963514636:web:9deea50fc536c090009b29"
         };
 
         // Load Firebase SDK
@@ -353,30 +354,39 @@
         // Load community recipes from Firebase
         async function loadCommunityRecipes() {
             try {
+                console.log('[Recipes] Initializing Firebase...');
                 const db = await initFirebase();
+                console.log('[Recipes] Firebase initialized, loading recipes...');
                 
                 const snapshot = await db.collection('community_recipes')
                     .orderBy('sharedAt', 'desc')
                     .limit(50)
                     .get();
                 
+                console.log('[Recipes] Query complete, found:', snapshot.size, 'recipes');
+                
                 if (snapshot.empty) {
-                    console.log('No community recipes found, showing samples');
+                    console.log('[Recipes] No community recipes found, showing samples');
                     loadSampleRecipes();
                     return;
                 }
                 
-                allRecipes = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
+                allRecipes = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    console.log('[Recipes] Loaded:', data.title);
+                    return {
+                        id: doc.id,
+                        ...data
+                    };
+                });
                 
-                console.log('Loaded', allRecipes.length, 'community recipes');
+                console.log('[Recipes] Total loaded:', allRecipes.length);
                 filteredRecipes = [...allRecipes];
                 renderRecipes();
                 
             } catch (e) {
-                console.error('Error loading community recipes:', e);
+                console.error('[Recipes] Error loading community recipes:', e);
+                console.log('[Recipes] Falling back to sample recipes');
                 loadSampleRecipes();
             }
         }
